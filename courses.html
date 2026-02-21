@@ -3,16 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IDEA VAULT CLUB Courses</title>
+    <title>Courses - IDEA VAULT CLUB</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-    <!-- Load Navbar -->
-    <header id="nav-placeholder"></header>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <img src="images/logo.png" alt="IDEA VAULT CLUB Logo" class="logo-nav">
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="quiz.html">Quizzes</a></li>
+            <li><a href="leaderboard.html">Leaderboard</a></li>
+            <li><a href="ip_tool.html">IP Tool</a></li>
+            <li><a href="profile.html">Profile</a></li>
+        </ul>
+    </nav>
 
     <main>
-        <!-- Hero -->
+        <!-- Hero Section -->
         <section id="hero">
             <div class="hero-content">
                 <h1>IDEA VAULT CLUB Courses</h1>
@@ -20,7 +28,7 @@
             </div>
         </section>
 
-        <!-- Filter Courses -->
+        <!-- Courses Filter -->
         <section id="courses-filter-section">
             <div class="courses-filter">
                 <input type="text" id="search-input" placeholder="Search courses..." />
@@ -37,11 +45,11 @@
         <!-- Courses Board -->
         <section id="courses-board">
             <div class="course-grid" id="coursesContainer">
-                <!-- Course cards dynamically added here -->
+                <!-- Courses dynamically loaded -->
             </div>
         </section>
 
-        <!-- Modal -->
+        <!-- Course Modal -->
         <div id="course-modal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
@@ -56,30 +64,31 @@
         <p>&copy; 2026 IDEA VAULT CLUB. All rights reserved.</p>
     </footer>
 
-    <!-- Load Navbar -->
+    <!-- JS Scripts -->
+    <script src="js/main.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            fetch("nav.html")
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("nav-placeholder").innerHTML = data;
-                });
-        });
-    </script>
+        // CHECK LOGIN
+        let currentUser = JSON.parse(localStorage.getItem('ivc_current_user'));
+        if(!currentUser){
+            alert('Please login first!');
+            window.location.href = 'login.html';
+        }
 
-    <!-- Courses JS -->
-    <script>
-        // Sample courses
-        const courses = JSON.parse(localStorage.getItem('ivc_courses')) || [
+        // Default courses if LocalStorage empty
+        let courses = JSON.parse(localStorage.getItem('ivc_courses')) || [
             { title: "Introduction to IP", category: "general", content: "Basics of IP: patents, trademarks, copyright, trade secrets." },
             { title: "Patents Explained", category: "patent", content: "Learn how to file and protect a patent." },
             { title: "Trademark & Branding", category: "trademark", content: "Protect your logo, name and brand identity." },
             { title: "Copyright Essentials", category: "copyright", content: "Protect books, music, and art." }
         ];
 
-        // Render courses
+        if(!localStorage.getItem('ivc_courses')){
+            localStorage.setItem('ivc_courses', JSON.stringify(courses));
+        }
+
         const container = document.getElementById('coursesContainer');
-        function renderCourses(list) {
+
+        function renderCourses(list){
             container.innerHTML = "";
             list.forEach((course, index) => {
                 const div = document.createElement('div');
@@ -98,7 +107,7 @@
 
         renderCourses(courses);
 
-        // Filter
+        // FILTER COURSES
         const searchInput = document.getElementById('search-input');
         const categorySelect = document.getElementById('category-select');
 
@@ -118,13 +127,13 @@
         searchInput.addEventListener('input', filterCourses);
         categorySelect.addEventListener('change', filterCourses);
 
-        // Modal
+        // MODAL FUNCTIONALITY
         const modal = document.getElementById('course-modal');
         const modalTitle = document.getElementById('modal-title');
         const modalContent = document.getElementById('modal-content');
         const closeBtn = document.querySelector('.close');
 
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function(e){
             if(e.target.classList.contains('view-details')){
                 const index = e.target.getAttribute('data-index');
                 const course = courses[index];
@@ -138,42 +147,13 @@
         window.addEventListener('click', e => { if(e.target === modal) modal.style.display = 'none'; });
     </script>
 
-    <!-- Minimal modal & filter CSS -->
+    <!-- Minimal CSS -->
     <style>
-        .course-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
-            gap: 1rem;
-            padding: 1rem;
-        }
-
-        .product-card {
-            background: #fff;
-            padding: 1rem;
-            border-radius: 10px;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        .product-card h3 {
-            margin: 0.5rem 0;
-        }
-
-        .view-details {
-            margin-top: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        .view-details:hover {
-            background: #0056b3;
-        }
-
-        /* Modal */
+        .course-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap: 1rem; padding: 1rem; }
+        .product-card { background: #fff; padding: 1rem; border-radius: 10px; box-shadow: 0 3px 8px rgba(0,0,0,0.1); text-align:center; }
+        .product-card h3 { margin: 0.5rem 0; }
+        .view-details { margin-top: 0.5rem; padding:0.5rem 1rem; background:#007bff; color:white; border:none; border-radius:6px; cursor:pointer; }
+        .view-details:hover { background:#0056b3; }
         .modal { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background-color: rgba(0,0,0,0.5);}
         .modal-content { background:#fff; margin:10% auto; padding:2rem; border-radius:10px; width:90%; max-width:400px; text-align:center;}
         .close { float:right; font-size:1.5rem; cursor:pointer; }
