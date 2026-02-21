@@ -1,1 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - IDEA VAULT CLUB</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <img src="images/logo.png" alt="IDEA VAULT CLUB Logo" class="logo-nav">
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="courses.html">Courses</a></li>
+            <li><a href="quiz.html">Quizzes</a></li>
+            <li><a href="ip_tool.html">IP Tool</a></li>
+            <li><a href="profile.html">Profile</a></li>
+        </ul>
+    </nav>
 
+    <!-- Leaderboard Section -->
+    <section class="leaderboard-section">
+        <h1>Leaderboard</h1>
+        <table id="leaderboardTable">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Filled by JavaScript -->
+            </tbody>
+        </table>
+    </section>
+
+    <script src="js/main.js"></script>
+    <script>
+        // FETCH USERS AND SORT BY SCORE
+        let users = JSON.parse(localStorage.getItem('ivc_members')) || [];
+        users.sort((a,b) => b.score - a.score); // descending by score
+
+        const tbody = document.querySelector('#leaderboardTable tbody');
+        users.forEach((user, index) => {
+            let tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${user.username}</td>
+                <td>${user.email}</td>
+                <td>${user.score}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    </script>
+</body>
+</html>
