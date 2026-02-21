@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Business Tool - IDEA VAULT CLUB</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <img src="images/logo.png" alt="IDEA VAULT CLUB Logo" class="logo-nav">
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="courses.html">Courses</a></li>
+            <li><a href="quiz.html">Quizzes</a></li>
+            <li><a href="leaderboard.html">Leaderboard</a></li>
+            <li><a href="profile.html">Profile</a></li>
+        </ul>
+    </nav>
+
+    <!-- IP Tool Section -->
+    <section class="ip-tool-section">
+        <h1>IP Business Decision Tool</h1>
+        <p>Answer the questions below to determine the type of IP protection your business idea may need:</p>
+
+        <div id="toolContainer">
+            <div class="question-step" id="step1">
+                <p>1. Is your idea a product, brand, or creative work?</p>
+                <button class="tool-btn" data-type="brand">Brand/Logo</button>
+                <button class="tool-btn" data-type="product">Product/Invent</button>
+                <button class="tool-btn" data-type="creative">Creative Work</button>
+            </div>
+
+            <div class="question-step" id="step2" style="display:none;">
+                <p id="step2-question"></p>
+                <button class="tool-btn" id="nextStep">Next</button>
+            </div>
+
+            <div id="result" style="display:none;">
+                <h2>Recommended IP Type:</h2>
+                <p id="ipResult"></p>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/main.js"></script>
+    <script>
+        let step1Btns = document.querySelectorAll('#step1 .tool-btn');
+        let step2 = document.getElementById('step2');
+        let step2Question = document.getElementById('step2-question');
+        let nextStepBtn = document.getElementById('nextStep');
+        let resultDiv = document.getElementById('result');
+        let ipResult = document.getElementById('ipResult');
+        let selectedType = '';
+
+        step1Btns.forEach(btn => {
+            btn.addEventListener('click', function(){
+                selectedType = this.getAttribute('data-type');
+                document.getElementById('step1').style.display = 'none';
+                step2.style.display = 'block';
+
+                if(selectedType === 'brand'){
+                    step2Question.textContent = "Do you want to protect your brand name or logo?";
+                } else if(selectedType === 'product'){
+                    step2Question.textContent = "Do you want to patent your product invention?";
+                } else if(selectedType === 'creative'){
+                    step2Question.textContent = "Do you want to copyright your creative work (books, music, art)?";
+                }
+            });
+        });
+
+        nextStepBtn.addEventListener('click', function(){
+            step2.style.display = 'none';
+            resultDiv.style.display = 'block';
+
+            if(selectedType === 'brand'){
+                ipResult.textContent = "You should register a TRADEMARK to protect your brand/logo.";
+            } else if(selectedType === 'product'){
+                ipResult.textContent = "You should file a PATENT to protect your invention/product.";
+            } else if(selectedType === 'creative'){
+                ipResult.textContent = "You should register COPYRIGHT for your creative work.";
+            }
+        });
+    </script>
+</body>
+</html>
