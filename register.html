@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - IDEA VAULT CLUB</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <img src="images/logo.png" alt="IDEA VAULT CLUB Logo" class="logo-nav">
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="courses.html">Courses</a></li>
+            <li><a href="quiz.html">Quizzes</a></li>
+            <li><a href="leaderboard.html">Leaderboard</a></li>
+            <li><a href="ip_tool.html">IP Tool</a></li>
+            <li><a href="login.html">Login</a></li>
+        </ul>
+    </nav>
+
+    <!-- Registration Form -->
+    <section class="form-section">
+        <h1>Member Registration</h1>
+        <form id="registerForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" required placeholder="Enter your username">
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" required placeholder="Enter your email">
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" required placeholder="Enter your password">
+
+            <button type="submit" class="btn-primary">Register</button>
+        </form>
+        <p>Already have an account? <a href="login.html">Login here</a></p>
+    </section>
+
+    <script src="js/main.js"></script>
+    <script>
+        // REGISTRATION FUNCTIONALITY
+        document.getElementById('registerForm').addEventListener('submit', function(e){
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            let users = JSON.parse(localStorage.getItem('ivc_members')) || [];
+
+            // Check if email already exists
+            if(users.find(u => u.email === email)){
+                alert('This email is already registered.');
+                return;
+            }
+
+            let newUser = {
+                username: username,
+                email: email,
+                password: password,
+                score: 0
+            };
+
+            users.push(newUser);
+            localStorage.setItem('ivc_members', JSON.stringify(users));
+            alert('Registration successful! You can now login.');
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>
