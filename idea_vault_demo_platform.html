@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IDEA VAULT CLUB</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b0c10;
+      color: white;
+    }
+    header {
+      background: linear-gradient(90deg,#1f2833,#0b0c10);
+      padding: 20px;
+      text-align: center;
+    }
+    header img {
+      width: 120px;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      background: #1f2833;
+      padding: 15px;
+    }
+    nav a {
+      color: #66fcf1;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    section {
+      padding: 50px;
+    }
+    .hero {
+      background: url('club.jpg') center/cover;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 3em;
+      background: rgba(0,0,0,0.6);
+      padding: 20px;
+    }
+    .card {
+      background: #1f2833;
+      padding: 20px;
+      margin: 20px;
+      border-radius: 10px;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #1f2833;
+    }
+    button {
+      background: #66fcf1;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="logo.png" alt="IDEA VAULT CLUB Logo">
+  <h2>IDEA VAULT CLUB</h2>
+</header>
+
+<nav>
+  <a href="#courses">Courses</a>
+  <a href="#quiz">Quiz</a>
+  <a href="#ipguide">IP Guide</a>
+</nav>
+
+<section class="hero">
+  <h1>Protect Ideas. Build Future.</h1>
+</section>
+
+<section id="courses">
+  <h2>IP COURSES</h2>
+  <div class="card">
+    <h3>Introduction to Intellectual Property</h3>
+    <p>Learn about patents, trademarks, copyright and industrial design.</p>
+  </div>
+  <div class="card">
+    <h3>How Businesses Use IP</h3>
+    <p>Understand how companies protect innovation.</p>
+  </div>
+</section>
+
+<section id="quiz">
+  <h2>IP QUIZ</h2>
+  <div class="card">
+    <p>What protects a brand name?</p>
+    <button onclick="alert('Correct Answer: Trademark')">Show Answer</button>
+  </div>
+</section>
+
+<section id="ipguide">
+  <h2>HOW TO GET IP RIGHTS</h2>
+  <div class="card">
+    <p>Step 1: Identify your creation</p>
+    <p>Step 2: Choose IP type</p>
+    <p>Step 3: Apply through IP office</p>
+    <p>Step 4: Maintain protection</p>
+  </div>
+</section>
+
+<footer>
+  <p>IDEA VAULT CLUB © 2026</p>
+</footer>
+
+</body>
+</html>
