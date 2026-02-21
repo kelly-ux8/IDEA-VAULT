@@ -3,70 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Courses - IDEA VAULT CLUB</title>
+    <title>IDEA VAULT CLUB Courses</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <img src="images/logo.png" alt="IDEA VAULT CLUB Logo" class="logo-nav">
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="quiz.html">Quizzes</a></li>
-            <li><a href="leaderboard.html">Leaderboard</a></li>
-            <li><a href="ip_tool.html">IP Tool</a></li>
-            <li><a href="profile.html">Profile</a></li>
-        </ul>
-    </nav>
 
-    <!-- Courses Section -->
-    <section class="courses-section">
-        <h1>Intellectual Property Courses</h1>
-        <div id="coursesContainer">
-            <!-- Courses will be loaded here -->
+    <!-- Load Navbar -->
+    <header id="nav-placeholder"></header>
+
+    <main>
+        <!-- Hero -->
+        <section id="hero">
+            <div class="hero-content">
+                <h1>IDEA VAULT CLUB Courses</h1>
+                <p>Learn about Intellectual Property, Patents, Trademarks, Copyrights and more!</p>
+            </div>
+        </section>
+
+        <!-- Filter Courses -->
+        <section id="courses-filter-section">
+            <div class="courses-filter">
+                <input type="text" id="search-input" placeholder="Search courses..." />
+                <select id="category-select">
+                    <option value="all">All Categories</option>
+                    <option value="patent">Patent</option>
+                    <option value="trademark">Trademark</option>
+                    <option value="copyright">Copyright</option>
+                    <option value="general">General IP</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Courses Board -->
+        <section id="courses-board">
+            <div class="course-grid" id="coursesContainer">
+                <!-- Course cards dynamically added here -->
+            </div>
+        </section>
+
+        <!-- Modal -->
+        <div id="course-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3 id="modal-title"></h3>
+                <p id="modal-content"></p>
+            </div>
         </div>
-    </section>
+    </main>
 
-    <script src="js/main.js"></script>
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 IDEA VAULT CLUB. All rights reserved.</p>
+    </footer>
+
+    <!-- Load Navbar -->
     <script>
-        // CHECK LOGIN
-        let currentUser = JSON.parse(localStorage.getItem('ivc_current_user'));
-        if(!currentUser){
-            alert('Please login first!');
-            window.location.href = 'login.html';
-        }
-
-        // SAMPLE COURSES (if LocalStorage empty)
-        let courses = JSON.parse(localStorage.getItem('ivc_courses')) || [
-            {
-                title: "Introduction to Intellectual Property",
-                content: "Learn the basics of patents, trademarks, copyrights, and trade secrets."
-            },
-            {
-                title: "Patents Explained",
-                content: "Understand how patents work, how to file them, and their legal protections."
-            },
-            {
-                title: "Trademarks and Branding",
-                content: "Learn how trademarks protect logos, names, and brand identity."
-            }
-        ];
-
-        // Save default courses if LocalStorage empty
-        if(!localStorage.getItem('ivc_courses')){
-            localStorage.setItem('ivc_courses', JSON.stringify(courses));
-        }
-
-        const container = document.getElementById('coursesContainer');
-        courses.forEach(course => {
-            let div = document.createElement('div');
-            div.classList.add('course-card');
-            div.innerHTML = `
-                <h2>${course.title}</h2>
-                <p>${course.content}</p>
-            `;
-            container.appendChild(div);
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("nav.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("nav-placeholder").innerHTML = data;
+                });
         });
     </script>
+
+    <!-- Courses JS -->
+    <script>
+        // Sample courses
+        const courses = JSON.parse(localStorage.getItem('ivc_courses')) || [
+            { title: "Introduction to IP", category: "general", content: "Basics of IP: patents, trademarks, copyright, trade secrets." },
+            { title: "Patents Explained", category: "patent", content: "Learn how to file and protect a patent." },
+            { title: "Trademark & Branding", category: "trademark", content: "Protect your logo, name and brand identity." },
+            { title: "Copyright Essentials", category: "copyright", content: "Protect books, music, and art." }
+        ];
+
+        // Render courses
+        const container = document.getElementById('coursesContainer');
+        function renderCourses(list) {
+            container.innerHTML = "";
+            list.forEach((course, index) => {
+                const div = document.createElement('div');
+                div.classList.add('product-card');
+                div.setAttribute('data-category', course.category);
+                div.innerHTML = `
+                    <div class="product-info">
+                        <h3>${course.title}</h3>
+                        <p>${course.content.substring(0, 60)}...</p>
+                        <button class="view-details" data-index="${index}">View Details</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        renderCourses(courses);
+
+        // Filter
+        const searchInput = document.getElementById('search-input');
+        const categorySelect = document.getElementById('category-select');
+
+        function filterCourses() {
+            const searchText = searchInput.value.toLowerCase();
+            const selectedCategory = categorySelect.value;
+
+            const filtered = courses.filter(course => {
+                const matchText = course.title.toLowerCase().includes(searchText);
+                const matchCategory = (selectedCategory === "all") || (course.category === selectedCategory);
+                return matchText && matchCategory;
+            });
+
+            renderCourses(filtered);
+        }
+
+        searchInput.addEventListener('input', filterCourses);
+        categorySelect.addEventListener('change', filterCourses);
+
+        // Modal
+        const modal = document.getElementById('course-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalContent = document.getElementById('modal-content');
+        const closeBtn = document.querySelector('.close');
+
+        document.addEventListener('click', function(e) {
+            if(e.target.classList.contains('view-details')){
+                const index = e.target.getAttribute('data-index');
+                const course = courses[index];
+                modalTitle.innerText = course.title;
+                modalContent.innerText = course.content;
+                modal.style.display = 'block';
+            }
+        });
+
+        closeBtn.addEventListener('click', () => modal.style.display = 'none');
+        window.addEventListener('click', e => { if(e.target === modal) modal.style.display = 'none'; });
+    </script>
+
+    <!-- Minimal modal & filter CSS -->
+    <style>
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .product-card {
+            background: #fff;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .product-card h3 {
+            margin: 0.5rem 0;
+        }
+
+        .view-details {
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .view-details:hover {
+            background: #0056b3;
+        }
+
+        /* Modal */
+        .modal { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background-color: rgba(0,0,0,0.5);}
+        .modal-content { background:#fff; margin:10% auto; padding:2rem; border-radius:10px; width:90%; max-width:400px; text-align:center;}
+        .close { float:right; font-size:1.5rem; cursor:pointer; }
+    </style>
 </body>
 </html>
