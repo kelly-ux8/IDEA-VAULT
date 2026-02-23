@@ -3,155 +3,153 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IP Quizzes - IDEA VAULT CLUB</title>
+<title>IP Quizzes</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <nav class="navbar">
     <img src="images/logo.png" class="logo-nav">
-    <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="courses.html">Courses</a></li>
-        <li><a href="leaderboard.html">Leaderboard</a></li>
-        <li><a href="profile.html">Profile</a></li>
-    </ul>
 </nav>
 
-<main>
+<h1>Select IP Quiz</h1>
 
-<section class="hero">
-    <h1>IP Knowledge Quizzes</h1>
-    <p>Select your Intellectual Property area</p>
-</section>
+<select id="quizCategory">
+    <option value="">Choose Quiz</option>
+    <option value="patent">Patent</option>
+    <option value="trademark">Trademark</option>
+    <option value="copyright">Copyright</option>
+</select>
 
-<!-- Quiz Category -->
-<section class="quiz-select">
-    <select id="quizCategory">
-        <option value="">Choose Quiz Area</option>
-        <option value="patent">Patent</option>
-        <option value="trademark">Trademark</option>
-        <option value="copyright">Copyright</option>
-    </select>
-    <button onclick="loadQuiz()">Start Quiz</button>
-</section>
+<button onclick="startQuiz()">Start</button>
 
-<section id="quizSection" style="display:none;">
-    <h2 id="quizTitle"></h2>
-    <div id="quizContainer"></div>
-    <button onclick="submitQuiz()">Submit Quiz</button>
-</section>
+<h3 id="timer"></h3>
 
-<section id="resultSection" style="display:none;">
-    <h2>Your Score</h2>
-    <p id="scoreText"></p>
-    <div id="corrections"></div>
-    <button onclick="generateCertificate()">Download Certificate</button>
-</section>
+<div id="quizBox"></div>
+<button onclick="submitQuiz()">Submit</button>
 
-</main>
+<div id="results"></div>
+<button onclick="generateCertificate()" id="certBtn" style="display:none;">
+Download Certificate
+</button>
 
 <script>
 
-const quizData = {
-patent: [
-{q:"What does a patent protect?", options:["Brand","Invention","Music","Design"], answer:1},
-{q:"Patent validity lasts how long?", options:["5 yrs","10 yrs","20 yrs","Forever"], answer:2}
+let PASS_MARK = 60;
+let TIME_LIMIT = 60;
+let timer;
+let timeLeft = TIME_LIMIT;
+
+let quizzes = JSON.parse(localStorage.getItem("ivc_quizzes")) || {
+patent:[
+{q:"Patent protects?",options:["Logo","Invention","Music"],answer:1}
 ],
-trademark: [
-{q:"Trademark protects?", options:["Invention","Logo","Song","Recipe"], answer:1},
-{q:"Trademark applies to?", options:["Brand name","Land","Building","Machine"], answer:0}
+trademark:[
+{q:"Trademark protects?",options:["Brand","Idea","Machine"],answer:0}
 ],
-copyright: [
-{q:"Copyright protects?", options:["Books","Machines","Ideas","Factories"], answer:0},
-{q:"Copyright applies to?", options:["Music","Invention","Logo","Medicine"], answer:0}
+copyright:[
+{q:"Copyright protects?",options:["Book","Machine","Logo"],answer:0}
 ]
 };
 
-let selectedQuiz = [];
-let userAnswers = [];
+localStorage.setItem("ivc_quizzes", JSON.stringify(quizzes));
 
-function loadQuiz(){
+let currentQuiz=[];
+
+function startQuiz(){
 let category = document.getElementById("quizCategory").value;
-if(!category) return alert("Select quiz first");
+if(!category) return alert("Choose category");
 
-selectedQuiz = quizData[category];
-document.getElementById("quizTitle").innerText = category.toUpperCase() + " QUIZ";
+currentQuiz = quizzes[category];
+document.getElementById("quizBox").innerHTML="";
 
-let container = document.getElementById("quizContainer");
-container.innerHTML="";
-userAnswers=[];
-
-selectedQuiz.forEach((q,index)=>{
+currentQuiz.forEach((q,i)=>{
 let div = document.createElement("div");
 div.innerHTML = `<h3>${q.q}</h3>` +
-q.options.map((opt,i)=>
-`<label><input type="radio" name="q${index}" value="${i}">${opt}</label><br>`
+q.options.map((opt,index)=>
+`<label><input type="radio" name="q${i}" value="${index}">${opt}</label><br>`
 ).join("");
-container.appendChild(div);
+document.getElementById("quizBox").appendChild(div);
 });
 
-document.getElementById("quizSection").style.display="block";
+startTimer();
+}
+
+function startTimer(){
+timeLeft = TIME_LIMIT;
+document.getElementById("timer").innerText = "Time: " + timeLeft;
+
+timer = setInterval(()=>{
+timeLeft--;
+document.getElementById("timer").innerText = "Time: " + timeLeft;
+
+if(timeLeft<=0){
+clearInterval(timer);
+submitQuiz();
+}
+},1000);
 }
 
 function submitQuiz(){
-let score = 0;
-let correctionHTML="";
+clearInterval(timer);
+let score=0;
+let corrections="";
 
-selectedQuiz.forEach((q,i)=>{
-let selected = document.querySelector(`input[name="q${i}"]:checked`);
+currentQuiz.forEach((q,i)=>{
+let selected = document.querySelector(`input[name=q${i}]:checked`);
 let answer = selected ? parseInt(selected.value) : -1;
-userAnswers.push(answer);
 
-if(answer === q.answer){
+if(answer===q.answer){
 score++;
 }else{
-correctionHTML += `
-<p>
-❌ ${q.q}<br>
-Your answer: ${q.options[answer] || "None"}<br>
-Correct answer: ${q.options[q.answer]}
-</p>`;
+corrections+=`
+<p>Wrong: ${q.q}<br>
+Correct: ${q.options[q.answer]}</p>`;
 }
 });
 
-let percent = (score/selectedQuiz.length)*100;
+let percent = (score/currentQuiz.length)*100;
 
-document.getElementById("scoreText").innerText =
-`You scored ${score}/${selectedQuiz.length} (${percent}%)`;
+document.getElementById("results").innerHTML =
+`Score: ${percent}%<br>${corrections}`;
 
-document.getElementById("corrections").innerHTML = correctionHTML;
-document.getElementById("resultSection").style.display="block";
+if(percent >= PASS_MARK){
+document.getElementById("certBtn").style.display="block";
+alert("You passed!");
+updateLeaderboard(percent);
+}else{
+alert("You failed. Pass mark is 60%");
+}
+}
 
-// Save marks
-let currentUser = JSON.parse(localStorage.getItem('ivc_current_user'));
-currentUser.score = percent;
-localStorage.setItem('ivc_current_user', JSON.stringify(currentUser));
+function updateLeaderboard(score){
+let user = JSON.parse(localStorage.getItem("ivc_current_user"));
+let board = JSON.parse(localStorage.getItem("ivc_leaderboard")) || [];
+
+board.push({
+name:user.name,
+score:score
+});
+
+board.sort((a,b)=>b.score-a.score);
+
+localStorage.setItem("ivc_leaderboard", JSON.stringify(board));
 }
 
 function generateCertificate(){
-let user = JSON.parse(localStorage.getItem('ivc_current_user'));
-
-let certWindow = window.open("", "_blank");
-certWindow.document.write(`
+let user = JSON.parse(localStorage.getItem("ivc_current_user"));
+let win = window.open("","");
+win.document.write(`
 <h1>IDEA VAULT CLUB</h1>
 <h2>Certificate of Achievement</h2>
 <p>This certifies that</p>
 <h2>${user.name}</h2>
-<p>has successfully completed an IP Quiz</p>
-<p>Score: ${user.score}%</p>
+<p>Has passed an IP Quiz</p>
 <p>Date: ${new Date().toLocaleDateString()}</p>
 `);
 }
 
 </script>
-
-<style>
-.hero{text-align:center;padding:2rem;background:#007bff;color:white}
-.quiz-select{text-align:center;margin:1rem}
-#quizContainer{padding:1rem}
-#quizContainer div{background:#fff;margin:1rem;padding:1rem;border-radius:8px}
-</style>
 
 </body>
 </html>
