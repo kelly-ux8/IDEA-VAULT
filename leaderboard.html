@@ -22,7 +22,7 @@
     <!-- Leaderboard Section -->
     <section class="leaderboard-section">
         <h1>Leaderboard</h1>
-        <table id="leaderboardTable">
+      <div id="board"></div>
             <thead>
                 <tr>
                     <th>Rank</th>
@@ -39,21 +39,12 @@
 
     <script src="js/main.js"></script>
     <script>
-        // FETCH USERS AND SORT BY SCORE
-        let users = JSON.parse(localStorage.getItem('ivc_members')) || [];
-        users.sort((a,b) => b.score - a.score); // descending by score
+let board = JSON.parse(localStorage.getItem("ivc_leaderboard")) || [];
 
-        const tbody = document.querySelector('#leaderboardTable tbody');
-        users.forEach((user, index) => {
-            let tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${user.username}</td>
-                <td>${user.email}</td>
-                <td>${user.score}</td>
-            `;
-            tbody.appendChild(tr);
-        });
-    </script>
+board.forEach(user=>{
+document.getElementById("board").innerHTML +=
+`<p>${user.name} - ${user.score}%</p>`;
+});
+</script>
 </body>
 </html>
