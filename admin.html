@@ -22,6 +22,37 @@
 
     <!-- Admin Panel -->
     <section class="admin-section">
+        <h1>Admin Quiz Upload</h1>
+
+<select id="category">
+<option value="patent">Patent</option>
+<option value="trademark">Trademark</option>
+<option value="copyright">Copyright</option>
+</select>
+
+<input id="question" placeholder="Question">
+<input id="opt1" placeholder="Option 1">
+<input id="opt2" placeholder="Option 2">
+<input id="opt3" placeholder="Option 3">
+<input id="correct" placeholder="Correct index (0,1,2)">
+
+<button onclick="addQuiz()">Upload</button>
+
+<script>
+function addQuiz(){
+let quizzes = JSON.parse(localStorage.getItem("ivc_quizzes"));
+let cat = document.getElementById("category").value;
+
+quizzes[cat].push({
+q:question.value,
+options:[opt1.value,opt2.value,opt3.value],
+answer:parseInt(correct.value)
+});
+
+localStorage.setItem("ivc_quizzes", JSON.stringify(quizzes));
+alert("Quiz Added!");
+}
+</script>
         <h1>Admin Panel</h1>
 
         <!-- Add New Course -->
