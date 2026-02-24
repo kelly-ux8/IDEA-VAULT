@@ -21,9 +21,12 @@ alert("Admin access only");
 window.location="admin-login.html";
 }
 // 🔒 Protect page
-if(localStorage.getItem("admin")!=="true"){
-alert("Admins only");
-window.location="admin-login.html";
+
+</script>
+  <script>
+if(localStorage.getItem("ivc_admin_logged_in") !== "true"){
+alert("Admin access only");
+window.location.href="admin-login.html";
 }
 </script>
 
