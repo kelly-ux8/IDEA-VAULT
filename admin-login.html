@@ -15,19 +15,29 @@ button{padding:10px 20px;background:black;color:white;border:none}
 <input type="text" id="username" placeholder="Admin Username"><br>
 <input type="password" id="password" placeholder="Password"><br>
 
-<button onclick="login()">Login</button>
+<button onclick="loginAdmin()">Login as Admin</button>
 
 <script>
-function login(){
-let user = document.getElementById("username").value;
-let pass = document.getElementById("password").value;
+function loginAdmin(){
 
-if(user==="admin" && pass==="IPvault123"){
-localStorage.setItem("admin","true");
-window.location="admin-panel.html";
+let email = document.getElementById("adminEmail").value;
+let pass = document.getElementById("adminPass").value;
+
+// SIMPLE ADMIN ACCOUNT
+if(email==="admin@ivc.com" && pass==="1234"){
+
+localStorage.setItem("ivc_admin", JSON.stringify({
+email:email
+}));
+
+alert("Admin Login Successful");
+
+window.location="admin.html";
+
 }else{
-alert("Wrong Admin Credentials");
+alert("Wrong Admin Details");
 }
+
 }
 </script>
 
