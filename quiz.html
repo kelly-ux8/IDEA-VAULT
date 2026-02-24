@@ -14,6 +14,19 @@ button{padding:10px;margin:10px;background:black;color:white;border:none}
 <body>
 
 <script>
+  // Get category from URL query
+const urlParams = new URLSearchParams(window.location.search);
+const categoryFilter = urlParams.get('category') || 'all';
+
+// Filter quizzes by category
+let quizzes = JSON.parse(localStorage.getItem('quizzes')) || [];
+
+if(categoryFilter !== 'all'){
+    quizzes = quizzes.filter(q => q.category === categoryFilter);
+}
+
+// Render quizzes as usual
+renderQuizzes(quizzes);
 // 🔒 Must login
 let user = JSON.parse(localStorage.getItem("ivc_current_user"));
 if(!user){
