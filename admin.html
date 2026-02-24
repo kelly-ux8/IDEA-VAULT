@@ -14,19 +14,10 @@ button{padding:10px;background:black;color:white;border:none}
 <body>
 
 <script>
-  let admin = JSON.parse(localStorage.getItem("ivc_admin"));
-
-if(!admin){
-alert("Admin access only");
-window.location="admin.html";
-}
-// 🔒 Protect page
-
-</script>
-  <script>
+// Protect admin panel
 if(localStorage.getItem("ivc_admin_logged_in") !== "true"){
-alert("Admin access only");
-window.location.href="admin.html";
+alert("Admin access only!");
+window.location.href="admin-login.html";
 }
 </script>
 
@@ -59,6 +50,7 @@ window.location.href="admin.html";
 <option value="2">Option 3</option>
 <option value="3">Option 4</option>
 </select>
+  <button onclick="saveQuiz()">Upload Quiz</button>
 
 <button onclick="adminLogout()" class="admin-logout-btn">
 Logout Admin
@@ -81,13 +73,11 @@ Logout Admin
 
 function adminLogout(){
 
-// remove admin session
-localStorage.removeItem("ivc_admin");
+localStorage.removeItem("ivc_admin_logged_in");
 
 alert("Admin logged out");
 
-// redirect to homepage
-window.location="index.html";
+window.location.href="index.html";
 
 }
 function saveQuiz(){
