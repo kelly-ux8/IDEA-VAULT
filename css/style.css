@@ -1,4 +1,17 @@
 /* GENERAL STYLING */
+.admin-logout-btn{
+background:red;
+color:white;
+border:none;
+padding:10px 15px;
+border-radius:6px;
+cursor:pointer;
+margin:10px;
+}
+
+.admin-logout-btn:hover{
+background:darkred;
+}
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
