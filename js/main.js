@@ -151,7 +151,13 @@ function setupIPTool(){
         }
     });
 }
+// SHOW ADMIN LINK
+let adminUser = JSON.parse(localStorage.getItem("ivc_admin"));
 
+if(adminUser){
+    let link = document.getElementById("adminLink");
+    if(link) link.style.display="block";
+}
 // ==================== EXPORTS ====================
 // Call these functions in your pages as needed:
 // loadProfile(), loadLeaderboard(), loadCourses(), setupIPTool()
