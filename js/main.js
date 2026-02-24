@@ -158,6 +158,20 @@ if(adminUser){
     let link = document.getElementById("adminLink");
     if(link) link.style.display="block";
 }
+function checkAdminLink(){
+let adminUser = JSON.parse(localStorage.getItem("ivc_admin"));
+let link = document.getElementById("adminLink");
+
+if(link){
+    if(adminUser){
+        link.style.display="block";
+    }else{
+        link.style.display="none";
+    }
+}
+}
+
+checkAdminLink();
 // ==================== EXPORTS ====================
 // Call these functions in your pages as needed:
 // loadProfile(), loadLeaderboard(), loadCourses(), setupIPTool()
