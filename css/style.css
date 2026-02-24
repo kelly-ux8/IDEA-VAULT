@@ -1,4 +1,6 @@
-/* GENERAL STYLING */
+.take-quiz-btn:hover {
+    background: #218838;
+}/* GENERAL STYLING */
 .admin-logout-btn{
 background:red;
 color:white;
