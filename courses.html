@@ -1,162 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Courses - IDEA VAULT CLUB</title>
-    <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Courses - IDEA VAULT CLUB</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.course-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap: 1rem; padding: 1rem; }
+.product-card { background: #fff; padding: 1rem; border-radius: 10px; box-shadow: 0 3px 8px rgba(0,0,0,0.1); text-align:center; }
+.product-card h3 { margin: 0.5rem 0; }
+.view-details { margin-top: 0.5rem; padding:0.5rem 1rem; background:#007bff; color:white; border:none; border-radius:6px; cursor:pointer; }
+.view-details:hover { background:#0056b3; }
+.modal { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background-color: rgba(0,0,0,0.5);}
+.modal-content { background:#fff; margin:5% auto; padding:2rem; border-radius:10px; width:90%; max-width:600px; text-align:left; }
+.close { float:right; font-size:1.5rem; cursor:pointer; }
+.course-section { margin: 50px auto; max-width: 1000px; }
+#search-input, #category-select { padding:10px; margin:10px; width:calc(50% - 20px); }
+.course-notes { margin-top:10px; }
+.course-notes h4 { margin-bottom:5px; }
+.course-notes ul { margin-left:20px; }
+.course-notes a { color:#007bff; text-decoration:none; }
+.course-notes a:hover { text-decoration:underline; }
+</style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <img src="images/logo.png" alt="IDEA VAULT CLUB Logo" class="logo-nav">
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="quiz.html">Quizzes</a></li>
-            <li><a href="leaderboard.html">Leaderboard</a></li>
-            <li><a href="ip_tool.html">IP Tool</a></li>
-            <li><a href="profile.html">Profile</a></li>
-        </ul>
-    </nav>
 
-    <main>
-        <!-- Hero Section -->
-        <section id="hero">
-            <div class="hero-content">
-                <h1>IDEA VAULT CLUB Courses</h1>
-                <p>Learn about Intellectual Property, Patents, Trademarks, Copyrights and more!</p>
-            </div>
-        </section>
+<!-- Navigation -->
+<nav class="navbar">
+    <img src="images/logo.png" alt="IDEA VAULT CLUB Logo" class="logo-nav">
+    <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="quiz.html">Quizzes</a></li>
+        <li><a href="leaderboard.html">Leaderboard</a></li>
+        <li><a href="ip_tool.html">IP Tool</a></li>
+        <li><a href="profile.html">Profile</a></li>
+    </ul>
+</nav>
 
-        <!-- Courses Filter -->
-        <section id="courses-filter-section">
-            <div class="courses-filter">
-                <input type="text" id="search-input" placeholder="Search courses..." />
-                <select id="category-select">
-                    <option value="all">All Categories</option>
-                    <option value="patent">Patent</option>
-                    <option value="trademark">Trademark</option>
-                    <option value="copyright">Copyright</option>
-                    <option value="general">General IP</option>
-                </select>
-            </div>
-        </section>
+<main>
+<section class="course-section">
+<h1>Intellectual Property Courses</h1>
 
-        <!-- Courses Board -->
-        <section id="courses-board">
-            <div class="course-grid" id="coursesContainer">
-                <!-- Courses dynamically loaded -->
-            </div>
-        </section>
+<div class="courses-filter">
+    <input type="text" id="search-input" placeholder="Search courses..."/>
+    <select id="category-select">
+        <option value="all">All Categories</option>
+        <option value="patent">Patent</option>
+        <option value="trademark">Trademark</option>
+        <option value="copyright">Copyright</option>
+        <option value="industrial">Industrial Design</option>
+        <option value="general">General IP</option>
+    </select>
+</div>
 
-        <!-- Course Modal -->
-        <div id="course-modal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h3 id="modal-title"></h3>
-                <p id="modal-content"></p>
-            </div>
+<div class="course-grid" id="coursesContainer"></div>
+</section>
+
+<!-- Course Modal -->
+<div id="course-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3 id="modal-title"></h3>
+        <div id="modal-content"></div>
+    </div>
+</div>
+</main>
+
+<footer>
+<p>&copy; 2026 IDEA VAULT CLUB. All rights reserved.</p>
+</footer>
+
+<script>
+let currentUser = JSON.parse(localStorage.getItem('ivc_current_user'));
+if(!currentUser){
+    alert('Please login first!');
+    window.location.href = 'login.html';
+}
+
+// Courses with advanced study notes
+let courses = [
+    {
+        title: "Patents",
+        category: "patent",
+        content: "Learn how patents protect inventions and the filing process.",
+        notes: `
+        <div class="course-notes">
+            <h4>Key Points:</h4>
+            <ul>
+                <li>Patents give exclusive rights to inventions for a certain period (usually 20 years).</li>
+                <li>Requirements: novelty, inventive step, and industrial applicability.</li>
+                <li>Can include utility patents, design patents, and plant patents.</li>
+            </ul>
+            <h4>Examples:</h4>
+            <ul>
+                <li>Smartphone touchscreen technology.</li>
+                <li>New pharmaceutical drug formulations.</li>
+            </ul>
+            <h4>Resources:</h4>
+            <ul>
+                <li><a href="https://www.wipo.int/patents/en/" target="_blank">WIPO Patents Guide</a></li>
+                <li><a href="https://www.uspto.gov/patents/basics" target="_blank">USPTO Patent Basics</a></li>
+                <li><a href="https://www.aripo.org/ip-services/patents/" target="_blank">ARIPO Patent Info</a></li>
+            </ul>
         </div>
-    </main>
+        `
+    },
+    {
+        title: "Trademarks",
+        category: "trademark",
+        content: "Protect brand names, logos, and identifiers.",
+        notes: `
+        <div class="course-notes">
+            <h4>Key Points:</h4>
+            <ul>
+                <li>Trademarks protect logos, names, slogans, and brand identity.</li>
+                <li>Registration provides legal enforcement against infringement.</li>
+                <li>Can be renewed indefinitely as long as used in commerce.</li>
+            </ul>
+            <h4>Examples:</h4>
+            <ul>
+                <li>Nike swoosh</li>
+                <li>Apple logo</li>
+            </ul>
+            <h4>Resources:</h4>
+            <ul>
+                <li><a href="https://www.wipo.int/trademarks/en/" target="_blank">WIPO Trademarks Guide</a></li>
+                <li><a href="https://www.uspto.gov/trademarks/basics" target="_blank">USPTO Trademark Basics</a></li>
+                <li><a href="https://www.aripo.org/ip-services/trade-marks/" target="_blank">ARIPO Trademark Info</a></li>
+            </ul>
+        </div>
+        `
+    },
+    {
+        title: "Copyright",
+        category: "copyright",
+        content: "Protect literary, artistic, and software works.",
+        notes: `
+        <div class="course-notes">
+            <h4>Key Points:</h4>
+            <ul>
+                <li>Copyright protects original works of authorship.</li>
+                <li>Includes books, music, films, software, and art.</li>
+                <li>Lasts for the lifetime of the author plus additional years (varies by country).</li>
+            </ul>
+            <h4>Examples:</h4>
+            <ul>
+                <li>Harry Potter series</li>
+                <li>The Lion King movie</li>
+            </ul>
+            <h4>Resources:</h4>
+            <ul>
+                <li><a href="https://www.wipo.int/copyright/en/" target="_blank">WIPO Copyright Guide</a></li>
+                <li><a href="https://www.copyright.gov/" target="_blank">US Copyright Office</a></li>
+                <li><a href="https://www.aripo.org/ip-services/copyright/" target="_blank">ARIPO Copyright Info</a></li>
+            </ul>
+        </div>
+        `
+    },
+    {
+        title: "Industrial Design",
+        category: "industrial",
+        content: "Protect the visual design of objects.",
+        notes: `
+        <div class="course-notes">
+            <h4>Key Points:</h4>
+            <ul>
+                <li>Industrial designs protect the aesthetic or ornamental aspects of objects.</li>
+                <li>Does not protect technical functions (that's for patents).</li>
+                <li>Duration of protection varies, typically 15-25 years.</li>
+            </ul>
+            <h4>Examples:</h4>
+            <ul>
+                <li>Unique smartphone shapes</li>
+                <li>Furniture designs</li>
+            </ul>
+            <h4>Resources:</h4>
+            <ul>
+                <li><a href="https://www.wipo.int/designs/en/" target="_blank">WIPO Industrial Designs</a></li>
+                <li><a href="https://www.aripo.org/ip-services/industrial-design/" target="_blank">ARIPO Industrial Design Info</a></li>
+            </ul>
+        </div>
+        `
+    },
+    {
+        title: "Introduction to IP",
+        category: "general",
+        content: "Learn the basics of Intellectual Property rights and their importance.",
+        notes: `
+        <div class="course-notes">
+            <h4>Key Points:</h4>
+            <ul>
+                <li>Intellectual Property protects creations of the mind.</li>
+                <li>Major types: patents, trademarks, copyright, trade secrets, and industrial designs.</li>
+                <li>Helps businesses safeguard innovation and brand identity.</li>
+            </ul>
+            <h4>Resources:</h4>
+            <ul>
+                <li><a href="https://www.wipo.int/about-ip/en/" target="_blank">WIPO Overview of IP</a></li>
+                <li><a href="https://www.aripo.org/" target="_blank">ARIPO Resources</a></li>
+            </ul>
+        </div>
+        `
+    }
+];
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2026 IDEA VAULT CLUB. All rights reserved.</p>
-    </footer>
+const container = document.getElementById('coursesContainer');
+function renderCourses(list){
+    container.innerHTML = "";
+    list.forEach((course, index) => {
+        const div = document.createElement('div');
+        div.classList.add('product-card');
+        div.setAttribute('data-category', course.category);
+        div.innerHTML = `
+            <div class="product-info">
+                <h3>${course.title}</h3>
+                <p>${course.content.substring(0, 80)}...</p>
+                <button class="view-details" data-index="${index}">View Details</button>
+                <a href="quiz.html?category=${course.category}" class="take-quiz-btn" style="
+                    display:inline-block; margin-top:10px; padding:0.5rem 1rem; background:#28a745; color:white; border-radius:6px; text-decoration:none;">Take Quiz</a>
+            </div>
+        `;
+        container.appendChild(div);
+    });
+}
 
-    <!-- JS Scripts -->
-    <script src="js/main.js"></script>
-    <script>
-        // CHECK LOGIN
-        let currentUser = JSON.parse(localStorage.getItem('ivc_current_user'));
-        if(!currentUser){
-            alert('Please login first!');
-            window.location.href = 'login.html';
-        }
+renderCourses(courses);
 
-        // Default courses if LocalStorage empty
-        let courses = JSON.parse(localStorage.getItem('ivc_courses')) || [
-            { title: "Introduction to IP", category: "general", content: "Basics of IP: patents, trademarks, copyright, trade secrets." },
-            { title: "Patents Explained", category: "patent", content: "Learn how to file and protect a patent." },
-            { title: "Trademark & Branding", category: "trademark", content: "Protect your logo, name and brand identity." },
-            { title: "Copyright Essentials", category: "copyright", content: "Protect books, music, and art." }
-        ];
+// FILTER COURSES
+const searchInput = document.getElementById('search-input');
+const categorySelect = document.getElementById('category-select');
 
-        if(!localStorage.getItem('ivc_courses')){
-            localStorage.setItem('ivc_courses', JSON.stringify(courses));
-        }
+function filterCourses() {
+    const searchText = searchInput.value.toLowerCase();
+    const selectedCategory = categorySelect.value;
 
-        const container = document.getElementById('coursesContainer');
+    const filtered = courses.filter(course => {
+        const matchText = course.title.toLowerCase().includes(searchText);
+        const matchCategory = (selectedCategory === "all") || (course.category === selectedCategory);
+        return matchText && matchCategory;
+    });
 
-        function renderCourses(list){
-            container.innerHTML = "";
-            list.forEach((course, index) => {
-                const div = document.createElement('div');
-                div.classList.add('product-card');
-                div.setAttribute('data-category', course.category);
-                div.innerHTML = `
-                    <div class="product-info">
-                        <h3>${course.title}</h3>
-                        <p>${course.content.substring(0, 60)}...</p>
-                        <button class="view-details" data-index="${index}">View Details</button>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        }
+    renderCourses(filtered);
+}
 
-        renderCourses(courses);
+searchInput.addEventListener('input', filterCourses);
+categorySelect.addEventListener('change', filterCourses);
 
-        // FILTER COURSES
-        const searchInput = document.getElementById('search-input');
-        const categorySelect = document.getElementById('category-select');
+// MODAL FUNCTIONALITY
+const modal = document.getElementById('course-modal');
+const modalTitle = document.getElementById('modal-title');
+const modalContent = document.getElementById('modal-content');
+const closeBtn = document.querySelector('.close');
 
-        function filterCourses() {
-            const searchText = searchInput.value.toLowerCase();
-            const selectedCategory = categorySelect.value;
+document.addEventListener('click', function(e){
+    if(e.target.classList.contains('view-details')){
+        const index = e.target.getAttribute('data-index');
+        const course = courses[index];
+        modalTitle.innerText = course.title;
+        modalContent.innerHTML = course.notes; // Show full study notes with examples and links
+        modal.style.display = 'block';
+    }
+});
 
-            const filtered = courses.filter(course => {
-                const matchText = course.title.toLowerCase().includes(searchText);
-                const matchCategory = (selectedCategory === "all") || (course.category === selectedCategory);
-                return matchText && matchCategory;
-            });
+closeBtn.addEventListener('click', () => modal.style.display = 'none');
+window.addEventListener('click', e => { if(e.target === modal) modal.style.display = 'none'; });
+</script>
 
-            renderCourses(filtered);
-        }
-
-        searchInput.addEventListener('input', filterCourses);
-        categorySelect.addEventListener('change', filterCourses);
-
-        // MODAL FUNCTIONALITY
-        const modal = document.getElementById('course-modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalContent = document.getElementById('modal-content');
-        const closeBtn = document.querySelector('.close');
-
-        document.addEventListener('click', function(e){
-            if(e.target.classList.contains('view-details')){
-                const index = e.target.getAttribute('data-index');
-                const course = courses[index];
-                modalTitle.innerText = course.title;
-                modalContent.innerText = course.content;
-                modal.style.display = 'block';
-            }
-        });
-
-        closeBtn.addEventListener('click', () => modal.style.display = 'none');
-        window.addEventListener('click', e => { if(e.target === modal) modal.style.display = 'none'; });
-    </script>
-
-    <!-- Minimal CSS -->
-    <style>
-        .course-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap: 1rem; padding: 1rem; }
-        .product-card { background: #fff; padding: 1rem; border-radius: 10px; box-shadow: 0 3px 8px rgba(0,0,0,0.1); text-align:center; }
-        .product-card h3 { margin: 0.5rem 0; }
-        .view-details { margin-top: 0.5rem; padding:0.5rem 1rem; background:#007bff; color:white; border:none; border-radius:6px; cursor:pointer; }
-        .view-details:hover { background:#0056b3; }
-        .modal { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background-color: rgba(0,0,0,0.5);}
-        .modal-content { background:#fff; margin:10% auto; padding:2rem; border-radius:10px; width:90%; max-width:400px; text-align:center;}
-        .close { float:right; font-size:1.5rem; cursor:pointer; }
-    </style>
 </body>
 </html>
