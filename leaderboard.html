@@ -6,6 +6,15 @@
     <title>Leaderboard - IDEA VAULT CLUB</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+    <style>
+.board{max-width:700px;margin:auto;padding:20px;text-align:center}
+table{width:100%;border-collapse:collapse;margin-top:20px}
+th,td{padding:12px;border:1px solid #ddd}
+th{background:black;color:white}
+.top1{background:gold}
+.top2{background:silver}
+.top3{background:#cd7f32}
+</style>
 <body>
     <!-- Navigation Bar -->
     <nav class="navbar">
@@ -22,29 +31,66 @@
     <!-- Leaderboard Section -->
     <section class="leaderboard-section">
         <h1>Leaderboard</h1>
-      <div id="board"></div>
-            <thead>
-                <tr>
-                    <th>Rank</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Score</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Filled by JavaScript -->
-            </tbody>
-        </table>
-    </section>
 
-    <script src="js/main.js"></script>
-    <script>
-let board = JSON.parse(localStorage.getItem("ivc_leaderboard")) || [];
+<script>
+// 🔒 Must login
+let user = JSON.parse(localStorage.getItem("ivc_current_user"));
+if(!user){
+alert("Login first");
+window.location="login.html";
+}
+</script>
 
-board.forEach(user=>{
-document.getElementById("board").innerHTML +=
-`<p>${user.name} - ${user.score}%</p>`;
+<div class="board">
+
+<h2>🏆 Top Members</h2>
+
+<table>
+<thead>
+<tr>
+<th>Rank</th>
+<th>Name</th>
+<th>Score (%)</th>
+</tr>
+</thead>
+<tbody id="boardBody"></tbody>
+</table>
+
+</div>
+
+<script>
+
+let board = JSON.parse(localStorage.getItem("leaderboard")) || [];
+
+board.sort((a,b)=>b.score-a.score);
+
+let body = document.getElementById("boardBody");
+
+if(board.length===0){
+body.innerHTML="<tr><td colspan='3'>No Results Yet</td></tr>";
+}else{
+
+board.forEach((user,index)=>{
+
+let rankClass="";
+if(index===0) rankClass="top1";
+if(index===1) rankClass="top2";
+if(index===2) rankClass="top3";
+
+let row=`
+<tr class="${rankClass}">
+<td>${index+1}</td>
+<td>${user.name}</td>
+<td>${user.score}%</td>
+</tr>
+`;
+
+body.innerHTML+=row;
+
 });
+
+}
+
 </script>
 </body>
 </html>
