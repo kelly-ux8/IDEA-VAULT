@@ -248,6 +248,11 @@ document.getElementById("quizCount").innerText = quizzes.length;
 document.getElementById("courseCount").innerText = courses.length;
 
 </script>
+  <script>
+if(localStorage.getItem("ivc_admin_logged_in") === "true"){
+document.getElementById("adminLink").style.display="block";
+}
+</script>
 
 </body>
 </html>
