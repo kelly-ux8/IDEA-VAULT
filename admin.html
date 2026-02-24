@@ -1,131 +1,108 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - IDEA VAULT CLUB</title>
-    <link rel="stylesheet" href="css/style.css">
+<title>Admin Panel</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+body{font-family:Arial;background:#f5f5f5}
+.panel{max-width:800px;margin:auto;padding:20px}
+.card{background:white;padding:20px;margin:20px 0;border-radius:10px}
+input, select{padding:10px;margin:5px;width:100%}
+button{padding:10px;background:black;color:white;border:none}
+</style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <img src="images/logo.png" alt="IDEA VAULT CLUB Logo" class="logo-nav">
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="courses.html">Courses</a></li>
-            <li><a href="quiz.html">Quizzes</a></li>
-            <li><a href="leaderboard.html">Leaderboard</a></li>
-            <li><a href="ip_tool.html">IP Tool</a></li>
-            <li><a href="profile.html">Profile</a></li>
-        </ul>
-    </nav>
 
-    <!-- Admin Panel -->
-    <section class="admin-section">
-        <h1>Admin Quiz Upload</h1>
+<script>
+// 🔒 Protect page
+if(localStorage.getItem("admin")!=="true"){
+alert("Admins only");
+window.location="admin-login.html";
+}
+</script>
 
-<select id="category">
+<div class="panel">
+
+<h1>Admin Dashboard</h1>
+
+<button onclick="logout()">Logout</button>
+
+<div class="card">
+<h2>Upload New Quiz</h2>
+
+<input type="text" id="quizTitle" placeholder="Quiz Title">
+
+<select id="quizCategory">
 <option value="patent">Patent</option>
 <option value="trademark">Trademark</option>
 <option value="copyright">Copyright</option>
 </select>
 
-<input id="question" placeholder="Question">
-<input id="opt1" placeholder="Option 1">
-<input id="opt2" placeholder="Option 2">
-<input id="opt3" placeholder="Option 3">
-<input id="correct" placeholder="Correct index (0,1,2)">
+<input type="text" id="question" placeholder="Question">
+<input type="text" id="opt1" placeholder="Option 1">
+<input type="text" id="opt2" placeholder="Option 2">
+<input type="text" id="opt3" placeholder="Option 3">
+<input type="text" id="opt4" placeholder="Option 4">
 
-<button onclick="addQuiz()">Upload</button>
+<select id="correct">
+<option value="0">Option 1</option>
+<option value="1">Option 2</option>
+<option value="2">Option 3</option>
+<option value="3">Option 4</option>
+</select>
+
+<button onclick="saveQuiz()">Save Quiz</button>
+
+</div>
+
+<div class="card">
+<h2>Quiz Settings</h2>
+
+<input type="number" id="passmark" placeholder="Pass Mark (%)">
+<input type="number" id="timer" placeholder="Timer (seconds)">
+
+<button onclick="saveSettings()">Save Settings</button>
+
+</div>
+
+</div>
 
 <script>
-function addQuiz(){
-let quizzes = JSON.parse(localStorage.getItem("ivc_quizzes"));
-let cat = document.getElementById("category").value;
 
-quizzes[cat].push({
-q:question.value,
-options:[opt1.value,opt2.value,opt3.value],
-answer:parseInt(correct.value)
-});
-
-localStorage.setItem("ivc_quizzes", JSON.stringify(quizzes));
-alert("Quiz Added!");
+function logout(){
+localStorage.removeItem("admin");
+window.location="admin-login.html";
 }
+
+function saveQuiz(){
+
+let quiz = {
+title: document.getElementById("quizTitle").value,
+category: document.getElementById("quizCategory").value,
+question: document.getElementById("question").value,
+options: [
+document.getElementById("opt1").value,
+document.getElementById("opt2").value,
+document.getElementById("opt3").value,
+document.getElementById("opt4").value
+],
+answer: parseInt(document.getElementById("correct").value)
+};
+
+let quizzes = JSON.parse(localStorage.getItem("quizzes")) || [];
+quizzes.push(quiz);
+localStorage.setItem("quizzes", JSON.stringify(quizzes));
+
+alert("Quiz Saved!");
+}
+
+function saveSettings(){
+localStorage.setItem("passmark", document.getElementById("passmark").value);
+localStorage.setItem("timer", document.getElementById("timer").value);
+alert("Settings Saved");
+}
+
 </script>
-        <h1>Admin Panel</h1>
 
-        <!-- Add New Course -->
-        <div class="admin-card">
-            <h2>Add New Course</h2>
-            <form id="courseForm">
-                <input type="text" id="courseTitle" placeholder="Course Title" required>
-                <textarea id="courseContent" placeholder="Course Content" required></textarea>
-                <button type="submit" class="btn-primary">Add Course</button>
-            </form>
-        </div>
-
-        <!-- Add New Quiz -->
-        <div class="admin-card">
-            <h2>Add New Quiz</h2>
-            <form id="quizForm">
-                <input type="text" id="quizQuestion" placeholder="Quiz Question" required>
-                <input type="text" id="optionA" placeholder="Option A" required>
-                <input type="text" id="optionB" placeholder="Option B" required>
-                <input type="text" id="optionC" placeholder="Option C" required>
-                <input type="text" id="optionD" placeholder="Option D" required>
-                <select id="correctOption" required>
-                    <option value="">Select Correct Option</option>
-                    <option value="a">A</option>
-                    <option value="b">B</option>
-                    <option value="c">C</option>
-                    <option value="d">D</option>
-                </select>
-                <button type="submit" class="btn-primary">Add Quiz</button>
-            </form>
-        </div>
-    </section>
-
-    <script src="js/main.js"></script>
-    <script>
-        // CHECK ADMIN LOGIN
-        let currentUser = JSON.parse(localStorage.getItem('ivc_current_user'));
-        if(!currentUser || currentUser.email !== 'admin@ideavault.com'){
-            alert('Admin access only!');
-            window.location.href = 'login.html';
-        }
-
-        // ADD COURSE
-        document.getElementById('courseForm').addEventListener('submit', function(e){
-            e.preventDefault();
-            let title = document.getElementById('courseTitle').value.trim();
-            let content = document.getElementById('courseContent').value.trim();
-
-            let courses = JSON.parse(localStorage.getItem('ivc_courses')) || [];
-            courses.push({ title, content });
-            localStorage.setItem('ivc_courses', JSON.stringify(courses));
-            alert('Course added successfully!');
-            this.reset();
-        });
-
-        // ADD QUIZ
-        document.getElementById('quizForm').addEventListener('submit', function(e){
-            e.preventDefault();
-            let question = document.getElementById('quizQuestion').value.trim();
-            let a = document.getElementById('optionA').value.trim();
-            let b = document.getElementById('optionB').value.trim();
-            let c = document.getElementById('optionC').value.trim();
-            let d = document.getElementById('optionD').value.trim();
-            let correct = document.getElementById('correctOption').value;
-
-            if(!correct){ alert('Please select correct option'); return; }
-
-            let quizzes = JSON.parse(localStorage.getItem('ivc_quizzes')) || [];
-            quizzes.push({ question, a, b, c, d, correct });
-            localStorage.setItem('ivc_quizzes', JSON.stringify(quizzes));
-            alert('Quiz added successfully!');
-            this.reset();
-        });
-    </script>
 </body>
 </html>
