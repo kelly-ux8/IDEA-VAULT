@@ -1,152 +1,170 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IP Quizzes</title>
+<title>IP Quiz</title>
 <link rel="stylesheet" href="css/style.css">
+<style>
+.quiz-box{max-width:700px;margin:auto;padding:20px}
+button{padding:10px;margin:10px;background:black;color:white;border:none}
+.option{display:block;margin:5px 0;padding:10px;border:1px solid #ccc;cursor:pointer}
+.correct{background:#c8f7c5}
+.wrong{background:#f7c5c5}
+</style>
 </head>
 <body>
 
-<nav class="navbar">
-    <img src="images/logo.png" class="logo-nav">
-</nav>
+<script>
+// 🔒 Must login
+let user = JSON.parse(localStorage.getItem("ivc_current_user"));
+if(!user){
+alert("Login first");
+window.location="login.html";
+}
+</script>
 
-<h1>Select IP Quiz</h1>
+<div class="quiz-box">
 
-<select id="quizCategory">
-    <option value="">Choose Quiz</option>
-    <option value="patent">Patent</option>
-    <option value="trademark">Trademark</option>
-    <option value="copyright">Copyright</option>
-</select>
+<h2 id="quizTitle">Quiz</h2>
+<p>Time Left: <span id="time">0</span>s</p>
 
-<button onclick="startQuiz()">Start</button>
+<div id="quizArea"></div>
 
-<h3 id="timer"></h3>
+<button onclick="next()">Next</button>
 
-<div id="quizBox"></div>
-<button onclick="submitQuiz()">Submit</button>
+<h3 id="result"></h3>
 
-<div id="results"></div>
-<button onclick="generateCertificate()" id="certBtn" style="display:none;">
-Download Certificate
-</button>
+</div>
 
 <script>
 
-let PASS_MARK = 60;
-let TIME_LIMIT = 60;
-let timer;
-let timeLeft = TIME_LIMIT;
+// Load Admin Data
+let quizzes = JSON.parse(localStorage.getItem("quizzes")) || [];
+let passmark = parseInt(localStorage.getItem("passmark")) || 60;
+let timer = parseInt(localStorage.getItem("timer")) || 30;
 
-let quizzes = JSON.parse(localStorage.getItem("ivc_quizzes")) || {
-patent:[
-{q:"Patent protects?",options:["Logo","Invention","Music"],answer:1}
-],
-trademark:[
-{q:"Trademark protects?",options:["Brand","Idea","Machine"],answer:0}
-],
-copyright:[
-{q:"Copyright protects?",options:["Book","Machine","Logo"],answer:0}
-]
-};
+let index=0;
+let score=0;
+let timeLeft = timer;
+let countdown;
 
-localStorage.setItem("ivc_quizzes", JSON.stringify(quizzes));
-
-let currentQuiz=[];
+// Start
+startQuiz();
 
 function startQuiz(){
-let category = document.getElementById("quizCategory").value;
-if(!category) return alert("Choose category");
-
-currentQuiz = quizzes[category];
-document.getElementById("quizBox").innerHTML="";
-
-currentQuiz.forEach((q,i)=>{
-let div = document.createElement("div");
-div.innerHTML = `<h3>${q.q}</h3>` +
-q.options.map((opt,index)=>
-`<label><input type="radio" name="q${i}" value="${index}">${opt}</label><br>`
-).join("");
-document.getElementById("quizBox").appendChild(div);
-});
-
+if(quizzes.length===0){
+document.getElementById("quizArea").innerHTML="No quiz uploaded by admin";
+return;
+}
+showQuestion();
 startTimer();
 }
 
+function showQuestion(){
+
+if(index>=quizzes.length){
+finish();
+return;
+}
+
+let q = quizzes[index];
+
+document.getElementById("quizTitle").innerText = q.category.toUpperCase()+" Quiz";
+
+let html = `<h3>${q.question}</h3>`;
+
+q.options.forEach((opt,i)=>{
+html+=`<div class="option" onclick="answer(${i},this)">${opt}</div>`;
+});
+
+document.getElementById("quizArea").innerHTML = html;
+}
+
+function answer(i,el){
+
+let q = quizzes[index];
+
+let options = document.querySelectorAll(".option");
+
+options.forEach(o=>o.style.pointerEvents="none");
+
+if(i===q.answer){
+score++;
+el.classList.add("correct");
+}else{
+el.classList.add("wrong");
+options[q.answer].classList.add("correct");
+}
+}
+
+function next(){
+index++;
+showQuestion();
+resetTimer();
+}
+
+function finish(){
+
+clearInterval(countdown);
+
+let percent = Math.round((score/quizzes.length)*100);
+
+let msg = percent>=passmark ? "PASS" : "FAIL";
+
+document.getElementById("quizArea").innerHTML="";
+document.getElementById("result").innerHTML=
+"Score: "+percent+"% ("+msg+")";
+
+updateLeaderboard(percent,msg);
+generateCertificate(percent,msg);
+}
+
 function startTimer(){
-timeLeft = TIME_LIMIT;
-document.getElementById("timer").innerText = "Time: " + timeLeft;
-
-timer = setInterval(()=>{
+timeLeft = timer;
+document.getElementById("time").innerText=timeLeft;
+countdown=setInterval(()=>{
 timeLeft--;
-document.getElementById("timer").innerText = "Time: " + timeLeft;
-
+document.getElementById("time").innerText=timeLeft;
 if(timeLeft<=0){
-clearInterval(timer);
-submitQuiz();
+next();
 }
 },1000);
 }
 
-function submitQuiz(){
-clearInterval(timer);
-let score=0;
-let corrections="";
-
-currentQuiz.forEach((q,i)=>{
-let selected = document.querySelector(`input[name=q${i}]:checked`);
-let answer = selected ? parseInt(selected.value) : -1;
-
-if(answer===q.answer){
-score++;
-}else{
-corrections+=`
-<p>Wrong: ${q.q}<br>
-Correct: ${q.options[q.answer]}</p>`;
-}
-});
-
-let percent = (score/currentQuiz.length)*100;
-
-document.getElementById("results").innerHTML =
-`Score: ${percent}%<br>${corrections}`;
-
-if(percent >= PASS_MARK){
-document.getElementById("certBtn").style.display="block";
-alert("You passed!");
-updateLeaderboard(percent);
-}else{
-alert("You failed. Pass mark is 60%");
-}
+function resetTimer(){
+clearInterval(countdown);
+startTimer();
 }
 
-function updateLeaderboard(score){
-let user = JSON.parse(localStorage.getItem("ivc_current_user"));
-let board = JSON.parse(localStorage.getItem("ivc_leaderboard")) || [];
+// 🏆 Leaderboard
+function updateLeaderboard(percent,msg){
+
+let board = JSON.parse(localStorage.getItem("leaderboard"))||[];
 
 board.push({
 name:user.name,
-score:score
+score:percent
 });
 
 board.sort((a,b)=>b.score-a.score);
 
-localStorage.setItem("ivc_leaderboard", JSON.stringify(board));
+localStorage.setItem("leaderboard", JSON.stringify(board));
 }
 
-function generateCertificate(){
-let user = JSON.parse(localStorage.getItem("ivc_current_user"));
-let win = window.open("","");
-win.document.write(`
-<h1>IDEA VAULT CLUB</h1>
-<h2>Certificate of Achievement</h2>
-<p>This certifies that</p>
-<h2>${user.name}</h2>
-<p>Has passed an IP Quiz</p>
-<p>Date: ${new Date().toLocaleDateString()}</p>
-`);
+// 🎓 Certificate
+function generateCertificate(percent,msg){
+
+if(msg==="PASS"){
+
+let cert = {
+name:user.name,
+score:percent,
+date:new Date().toLocaleDateString()
+};
+
+localStorage.setItem("certificate", JSON.stringify(cert));
+
+alert("Certificate Earned!");
+}
 }
 
 </script>
