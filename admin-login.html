@@ -5,24 +5,24 @@
 
 <style>
 body{
-font-family:Arial;
-text-align:center;
-margin-top:100px;
-background:#f5f5f5;
+  font-family:Arial;
+  text-align:center;
+  margin-top:100px;
+  background:#f5f5f5;
 }
 
 input{
-padding:10px;
-margin:10px;
-width:250px;
+  padding:10px;
+  margin:10px;
+  width:250px;
 }
 
 button{
-padding:10px 20px;
-background:black;
-color:white;
-border:none;
-cursor:pointer;
+  padding:10px 20px;
+  background:black;
+  color:white;
+  border:none;
+  cursor:pointer;
 }
 </style>
 
@@ -34,31 +34,30 @@ cursor:pointer;
 <input type="text" id="adminEmail" placeholder="Admin Email"><br>
 <input type="password" id="adminPass" placeholder="Password"><br>
 
-<button onclick="loginAdmin()" href = "admin.html">Login as Admin</button>
+<!-- Correct button without href -->
+<button onclick="loginAdmin()">Login as Admin</button>
 
 <script>
 
 function loginAdmin(){
 
-let email = document.getElementById("adminEmail").value;
-let pass = document.getElementById("adminPass").value;
+  let email = document.getElementById("adminEmail").value;
+  let pass = document.getElementById("adminPass").value;
 
-// Admin Account
-if(email === "admin@ivc.com" && pass === "1234"){
+  // Admin credentials
+  if(email === "admin@ivc.com" && pass === "1234"){
 
-// Save admin session
-localStorage.setItem("ivc_admin_logged_in", "true");
+    // Save admin session
+    localStorage.setItem("ivc_admin_logged_in", "true");
 
-alert("Admin Login Successful");
+    alert("Admin Login Successful");
 
-// Go to panel
-window.location.href = 'admin.html';
+    // Redirect to admin panel
+    window.location.href = "admin.html";
 
-}else{
-
-alert("Wrong Admin Details");
-
-}
+  } else {
+    alert("Wrong Admin Details");
+  }
 
 }
 
