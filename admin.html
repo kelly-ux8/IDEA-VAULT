@@ -18,7 +18,7 @@ button{padding:10px;background:black;color:white;border:none}
 
 if(!admin){
 alert("Admin access only");
-window.location="admin-login.html";
+window.location="admin.html";
 }
 // 🔒 Protect page
 
@@ -26,7 +26,7 @@ window.location="admin-login.html";
   <script>
 if(localStorage.getItem("ivc_admin_logged_in") !== "true"){
 alert("Admin access only");
-window.location.href="admin-login.html";
+window.location.href="admin.html";
 }
 </script>
 
