@@ -179,6 +179,11 @@ localStorage.setItem("certificate", JSON.stringify(cert));
 alert("Certificate Earned!");
 }
 }
+  let currentUser = JSON.parse(localStorage.getItem("ivc_current_user"));
+
+if(currentUser){
+sendNotification(currentUser.email, "You completed a quiz.");
+}
 
 </script>
 
