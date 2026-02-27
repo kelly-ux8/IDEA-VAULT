@@ -1,74 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - IDEA VAULT CLUB</title>
-    <link rel="stylesheet" href="css/style.css">
+<title>Member Profile</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <img src="images/logo.png" alt="IDEA VAULT CLUB Logo" class="logo-nav">
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="courses.html">Courses</a></li>
-            <li><a href="quiz.html">Quizzes</a></li>
-            <li><a href="leaderboard.html">Leaderboard</a></li>
-            <li><a href="ip_tool.html">IP Tool</a></li>
-            <li><a href="#" id="logoutBtn">Logout</a></li>
-        </ul>
-    </nav>
 
-    <!-- Profile Section -->
-    <section class="profile-section">
-        <h1>Welcome, <span id="username"></span>!</h1>
-        <p>Email: <span id="email"></span></p>
-        <p>Your Score: <span id="score"></span></p>
+<h1>Member Profile</h1>
 
-        <div class="profile-actions">
-            <a href="courses.html" class="btn-primary">View Courses</a>
-            <a href="quiz.html" class="btn-primary">Take Quizzes</a>
-            <a href="certificate.html" class="btn-primary" id="downloadCert">Download Certificate</a>
-        </div>
-    </section>
+<div id="profileBox"></div>
 
-    <script src="js/main.js"></script>
-    <script>
-        // LOAD CURRENT USER
-        const currentUser = JSON.parse(localStorage.getItem('ivc_current_user'));
+<h2>Your Notifications</h2>
+<div id="notifications"></div>
 
-        if(!currentUser){
-            alert('You are not logged in.');
-            window.location.href = 'login.html';
-        } else {
-            document.getElementById('username').textContent = currentUser.username;
-            document.getElementById('email').textContent = currentUser.email;
-            document.getElementById('score').textContent = currentUser.score;
-        }
+<script src="js/notifications.js"></script>
 
-        // LOGOUT
-        document.getElementById('logoutBtn').addEventListener('click', function(){
-            localStorage.removeItem('ivc_current_user');
-            window.location.href = 'login.html';
-        });
+<script>
 
-        // DOWNLOAD CERTIFICATE (mock PDF)
-        document.getElementById('downloadCert').addEventListener('click', function(e){
-            e.preventDefault();
-            const certificateContent = `
-                IDEA VAULT CLUB\n
-                Certificate of Achievement\n\n
-                This is to certify that ${currentUser.username}\n
-                has completed courses and quizzes with score ${currentUser.score}.\n\n
-                Keep learning and innovating!
-            `;
-            const blob = new Blob([certificateContent], { type: "text/plain;charset=utf-8" });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `${currentUser.username}_certificate.txt`;
-            link.click();
-        });
-    </script>
+let user = JSON.parse(localStorage.getItem("ivc_current_user"));
+
+if(!user){
+alert("Login first");
+window.location="login.html";
+}
+
+// PROFILE INFO
+document.getElementById("profileBox").innerHTML = `
+<p><strong>Name:</strong> ${user.name}</p>
+<p><strong>Email:</strong> ${user.email}</p>
+`;
+
+// SHOW NOTIFICATIONS
+let allNotifications = JSON.parse(localStorage.getItem("ivc_notifications")) || [];
+
+let userNotes = allNotifications.filter(n => n.user === user.email);
+
+let display = "";
+
+userNotes.forEach(n => {
+display += `<p>${n.message}<br><small>${n.date}</small></p><hr>`;
+});
+
+document.getElementById("notifications").innerHTML = display;
+
+</script>
+
 </body>
 </html>
