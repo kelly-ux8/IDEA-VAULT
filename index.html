@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <link rel="manifest" href="manifest.json">
@@ -11,7 +11,7 @@
 <style>
 
 .section{
-padding:60px 20px;
+padding:80px 20px;
 text-align:center;
 }
 
@@ -28,9 +28,15 @@ margin-top:30px;
 
 .card{
 background:white;
-padding:20px;
-border-radius:10px;
-box-shadow:0 4px 10px rgba(0,0,0,0.1);
+padding:25px;
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-6px);
+box-shadow:0 20px 40px rgba(0,0,0,0.12);
 }
 
 .stats{
@@ -44,24 +50,68 @@ margin-top:30px;
 .stat-box{
 background:black;
 color:white;
-padding:20px;
-border-radius:10px;
-width:150px;
+padding:25px;
+border-radius:12px;
+width:170px;
 }
 
 .cta{
-background:#007bff;
+background:linear-gradient(135deg,#0d6efd,#6610f2);
 color:white;
-padding:50px 20px;
+padding:70px 20px;
 }
 
 .btn-secondary{
 background:white;
-color:#007bff;
-padding:10px 20px;
-border-radius:6px;
+color:#0d6efd;
+padding:12px 26px;
+border-radius:8px;
 text-decoration:none;
 font-weight:bold;
+display:inline-block;
+margin-top:10px;
+}
+
+.upload-box{
+border:2px dashed #ccc;
+padding:40px;
+border-radius:12px;
+max-width:700px;
+margin:40px auto;
+background:white;
+}
+
+.file-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:12px 16px;
+border:1px solid #ddd;
+border-radius:8px;
+margin-bottom:10px;
+background:white;
+}
+
+.ip-badge{
+border:1px solid #0d6efd;
+color:#0d6efd;
+padding:4px 10px;
+border-radius:20px;
+font-size:12px;
+margin-right:10px;
+}
+
+.partners img{
+height:40px;
+margin:10px 20px;
+opacity:0.8;
+}
+
+.testimonial{
+max-width:700px;
+margin:20px auto;
+font-style:italic;
+color:#444;
 }
 
 </style>
@@ -80,10 +130,7 @@ font-weight:bold;
 <li><a href="leaderboard.html">Leaderboard</a></li>
 <li><a href="ip_tool.html">IP Tool</a></li>
 <li><a href="login.html">Login</a></li>
-
-<li>
-<a href="admin-login.html">Admin Panel</a>
-</li>
+<li><a href="admin-login.html">Admin Panel</a></li>
 </ul>
 </nav>
 
@@ -93,6 +140,7 @@ font-weight:bold;
 <img src="images/logo.png" class="logo-hero">
 <h1>IDEA VAULT CLUB</h1>
 <p>Protect. Learn. Compete. Grow.</p>
+<p><strong>Innovation • IP Protection • Digital Learning</strong></p>
 <a href="register.html" class="btn-primary">Join Now</a>
 </div>
 </header>
@@ -112,25 +160,10 @@ understand Intellectual Property and apply it in real business ideas.
 
 <div class="grid">
 
-<div class="card">
-<h3>Protect Ideas</h3>
-<p>Secure ownership of your inventions, designs, and creations.</p>
-</div>
-
-<div class="card">
-<h3>Build Business</h3>
-<p>Use IP rights to turn innovation into real economic value.</p>
-</div>
-
-<div class="card">
-<h3>Avoid Copying</h3>
-<p>Learn how to protect your work from misuse.</p>
-</div>
-
-<div class="card">
-<h3>Compete Globally</h3>
-<p>Strong IP knowledge builds global-ready innovators.</p>
-</div>
+<div class="card"><h3>Protect Ideas</h3><p>Secure ownership of your inventions.</p></div>
+<div class="card"><h3>Build Business</h3><p>Turn innovation into real value.</p></div>
+<div class="card"><h3>Avoid Copying</h3><p>Protect your work from misuse.</p></div>
+<div class="card"><h3>Compete Globally</h3><p>Become a global innovator.</p></div>
 
 </div>
 </section>
@@ -138,92 +171,52 @@ understand Intellectual Property and apply it in real business ideas.
 <!-- FEATURES -->
 <section class="section">
 <h2>Platform Features</h2>
-
 <div class="grid">
-
-<div class="card">
-<h3>IP Courses</h3>
-<p>Learn patents, trademarks, copyright & trade secrets.</p>
-</div>
-
-<div class="card">
-<h3>Smart Quizzes</h3>
-<p>Timed quizzes with real scores & certificates.</p>
-</div>
-
-<div class="card">
-<h3>Leaderboard</h3>
-<p>Compete and become top IP expert.</p>
-</div>
-
-<div class="card">
-<h3>IP Tool</h3>
-<p>Discover rights for your business idea.</p>
-</div>
-
-<div class="card">
-<h3>Certificates</h3>
-<p>Earn proof of your knowledge.</p>
-</div>
-
-<div class="card">
-<h3>Admin System</h3>
-<p>Upload courses & quizzes dynamically.</p>
-</div>
-
+<div class="card"><h3>IP Courses</h3><p>Patents, trademarks, copyright.</p></div>
+<div class="card"><h3>Smart Quizzes</h3><p>Timed quizzes & certificates.</p></div>
+<div class="card"><h3>Leaderboard</h3><p>Ranked competitions.</p></div>
+<div class="card"><h3>IP Tool</h3><p>Discover rights for your idea.</p></div>
+<div class="card"><h3>Certificates</h3><p>Proof of your knowledge.</p></div>
+<div class="card"><h3>Admin System</h3><p>Manage content easily.</p></div>
 </div>
 </section>
 
-<!-- HOW IT WORKS -->
+<!-- IP FILE VAULT -->
 <section class="section dark">
-<h2>How It Works</h2>
+<h2>IP Vault – Protected Resources</h2>
+<p>Upload and download IP Club resources with IP labeling.</p>
 
-<div class="grid">
-
-<div class="card">
-<h3>1. Join</h3>
-<p>Create your member account.</p>
+<div class="upload-box">
+  <input type="file" id="fileInput">
+  <br><br>
+  <button onclick="uploadFile()">Upload File</button>
 </div>
 
-<div class="card">
-<h3>2. Learn</h3>
-<p>Study real IP concepts.</p>
+<div class="file-item">
+  <span>idea_template.pdf</span>
+  <div>
+    <span class="ip-badge">IP Protected</span>
+    <button onclick="downloadFile('idea_template.pdf')">Download</button>
+  </div>
 </div>
 
-<div class="card">
-<h3>3. Test</h3>
-<p>Take quizzes & get marks.</p>
+<div class="file-item">
+  <span>business_model.zip</span>
+  <div>
+    <span class="ip-badge">IP Protected</span>
+    <button onclick="downloadFile('business_model.zip')">Download</button>
+  </div>
 </div>
 
-<div class="card">
-<h3>4. Earn</h3>
-<p>Get certificates & rankings.</p>
-</div>
-
-</div>
 </section>
 
 <!-- LIVE STATS -->
 <section class="section">
 <h2>Community Progress</h2>
-
 <div class="stats">
-
-<div class="stat-box">
-<h3 id="memberCount">0</h3>
-<p>Members</p>
-</div>
-
-<div class="stat-box">
-<h3 id="quizCount">0</h3>
-<p>Quizzes</p>
-</div>
-
-<div class="stat-box">
-<h3 id="courseCount">0</h3>
-<p>Courses</p>
-</div>
-
+<div class="stat-box"><h3 id="memberCount">0</h3><p>Members</p></div>
+<div class="stat-box"><h3 id="quizCount">0</h3><p>Quizzes</p></div>
+<div class="stat-box"><h3 id="courseCount">0</h3><p>Courses</p></div>
 </div>
 </section>
 
@@ -239,8 +232,6 @@ understand Intellectual Property and apply it in real business ideas.
 </footer>
 
 <script>
-
-// LIVE COUNTS
 let users = JSON.parse(localStorage.getItem("ivc_users")) || [];
 let quizzes = JSON.parse(localStorage.getItem("quizzes")) || [];
 let courses = JSON.parse(localStorage.getItem("ivc_courses")) || [];
@@ -249,10 +240,14 @@ document.getElementById("memberCount").innerText = users.length;
 document.getElementById("quizCount").innerText = quizzes.length;
 document.getElementById("courseCount").innerText = courses.length;
 
-</script>
-  <script>
-if(localStorage.getItem("ivc_admin_logged_in") === "true"){
-document.getElementById("adminLink").style.display="block";
+function uploadFile(){
+  const file = document.getElementById("fileInput").files[0];
+  if(!file){ alert("Select a file first"); return; }
+  alert("File uploaded (frontend demo). Connect backend to store files.");
+}
+
+function downloadFile(name){
+  alert("Downloading " + name + " with IP protection label (demo)");
 }
 </script>
 
