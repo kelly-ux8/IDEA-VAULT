@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Innovators | IDEA VAULT</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">
+        <a href="index.html">IDEA VAULT</a>
+    </div>
+
+    <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="innovators.html" class="active">Upload Innovation</a></li>
+        <li><a href="marketplace.html">Marketplace</a></li>
+        <li><a href="leaderboard.html">Leaderboard</a></li>
+        <li><a href="iptool.html">IP Tool</a></li>
+        <li><a href="admin.html">Admin</a></li>
+    </ul>
+
+    <div class="auth-buttons">
+        <a href="login.html" class="btn login">Login</a>
+        <button onclick="logout()" class="btn logout">Logout</button>
+    </div>
+</nav>
+
+<!-- PAGE CONTENT -->
+<section class="page-container">
+    <h2>Upload Your Innovation</h2>
+
+    <form id="innovationForm">
+        <label>Title of Work</label>
+        <input type="text" id="title" required>
+
+        <label>Description</label>
+        <textarea id="description" required></textarea>
+
+        <label>Is this work new?</label>
+        <select id="ipStatus">
+            <option value="new">Yes, it is new</option>
+            <option value="existing">Already has IP Right</option>
+        </select>
+
+        <label>Upload File</label>
+        <input type="file" id="fileUpload" required>
+
+        <button type="submit">Submit Innovation</button>
+    </form>
+
+    <div id="statusMessage"></div>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
