@@ -12,6 +12,26 @@ button{padding:10px;margin:10px;background:black;color:white;border:none}
 </style>
 </head>
 <body>
+  <nav class="navbar">
+    <div class="logo">
+        <a href="index.html">IDEA VAULT</a>
+    </div>
+
+    <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="innovators.html">Upload Innovation</a></li>
+        <li><a href="marketplace.html" class="active">Marketplace</a></li>
+        <li><a href="leaderboard.html">Leaderboard</a></li>
+        <li><a href="iptool.html">IP Tool</a></li>
+        <li><a href="admin.html">Admin</a></li>
+    </ul>
+
+    <div class="auth-buttons">
+        <a href="login.html" class="btn login">Login</a>
+        <button onclick="logout()" class="btn logout">Logout</button>
+    </div>
+</nav>
 
 <script>
   // Get category from URL query
